@@ -21,10 +21,12 @@ export const validateRequest = (schemas: ValidationSchemas): RequestHandler => {
         req.body = schemas.body.parse(req.body);
       }
       if (schemas.params) {
-        req.params = schemas.params.parse(req.params);
+        const validatedParams = schemas.params.parse(req.params);
+        Object.assign(req.params, validatedParams);
       }
       if (schemas.query) {
-        req.query = schemas.query.parse(req.query);
+        const validatedQuery = schemas.query.parse(req.query);
+        Object.assign(req.query, validatedQuery);
       }
       next();
     } catch (error) {

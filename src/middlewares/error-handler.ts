@@ -13,13 +13,25 @@ export class ErrorHandler {
       return ErrorHandler.sendErrorResponse(jsonError, res);
     }
 
-    if (err instanceof AppError) {
-      ErrorHandler.sendErrorResponse(err, res);
-    } else {
-      console.error('Unexpected Error:', err);
-      const genericError = new AppError('Internal Server Error', 500, false);
-      ErrorHandler.sendErrorResponse(genericError, res);
+    if (
+      err instanceof Error &&
+      err.message === 'request size did not match content length'
+    ) {
+      const contentLengthError = new AppError(
+        'Request body size does not match Content-Length header',
+        400,
+        false
+      );
+      return ErrorHandler.sendErrorResponse(contentLengthError, res);
     }
+
+    if (err instanceof AppError) {
+      return ErrorHandler.sendErrorResponse(err, res);
+    }
+
+    console.error('Unexpected Error:', err);
+    const genericError = new AppError('Internal Server Error', 500, false);
+    return ErrorHandler.sendErrorResponse(genericError, res);
   }
 
   private static sendErrorResponse(err: AppError, res: Response): void {
