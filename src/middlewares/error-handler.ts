@@ -8,6 +8,11 @@ export class ErrorHandler {
     res: Response,
     _next: NextFunction
   ): void {
+    if (err instanceof SyntaxError && 'body' in err) {
+      const jsonError = new AppError('Invalid JSON payload', 400, false);
+      return ErrorHandler.sendErrorResponse(jsonError, res);
+    }
+
     if (err instanceof AppError) {
       ErrorHandler.sendErrorResponse(err, res);
     } else {

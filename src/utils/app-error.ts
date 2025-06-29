@@ -19,6 +19,7 @@ export class AppError extends Error {
 
 export class ValidationError extends AppError {
   constructor(message = 'Validation Error', errors?: any) {
+    console.log(errors)
     super(message, 400, true, errors);
   }
 }
