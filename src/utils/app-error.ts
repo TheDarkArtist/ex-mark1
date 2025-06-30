@@ -106,3 +106,10 @@ export class OrderProcessingError extends AppError {
   }
 }
 
+
+export class WebhookError extends AppError {
+  constructor(message = 'Webhook Processing Error', errors?: any) {
+    super(message, 400, true, errors);
+  }
+}
+

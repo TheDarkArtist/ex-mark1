@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import { AuthenticationError, NotFoundError, BadRequestError } from '../../../utils/app-error';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
-const JWT_EXPIRES_IN = '15m';
+const JWT_EXPIRES_IN = '15000m';
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'your_refresh_secret';
 const REFRESH_TOKEN_EXPIRES_IN = '7d';
 
