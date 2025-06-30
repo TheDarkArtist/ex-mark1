@@ -3,11 +3,47 @@ import crypto from 'crypto';
 import User from '../users/users.model';
 import bcrypt from 'bcrypt';
 import { AuthenticationError, NotFoundError, BadRequestError } from '../../../utils/app-error';
+import { generateVerificationToken } from '../../../utils/token';
+import { EmailService } from '../../../services/email/email.service';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 const JWT_EXPIRES_IN = '15000m';
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'your_refresh_secret';
 const REFRESH_TOKEN_EXPIRES_IN = '7d';
+
+const emailService = new EmailService();
+
+export async function resendVerificationEmail(email: string) {
+  const user = await User.findOne({ email });
+  if (!user) throw new NotFoundError('User not found');
+
+  if (user.emailVerified) {
+    throw new BadRequestError('Email is already verified');
+  }
+
+  const verificationToken = generateVerificationToken({ id: user.id.toString(), email: user.email });
+  await emailService.sendVerificationEmail(user.email, verificationToken, user.name);
+
+  return { message: 'Verification email resent successfully' };
+}
+
+
+export async function verifyEmail(token: string) {
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as { sub: string; email: string };
+    const user = await User.findById(decoded.sub);
+    if (!user) throw new NotFoundError('User not found');
+    if (user.emailVerified) return user;
+
+    user.emailVerified = true;
+    await user.save();
+
+    return user;
+  } catch {
+    throw new BadRequestError('Invalid or expired verification token');
+  }
+}
+
 
 function generateAccessToken(user: { id: string; email: string; role: string }) {
   return jwt.sign(user, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
@@ -57,10 +93,11 @@ export async function requestPasswordReset(email: string) {
   user.passwordResetExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
   await user.save();
 
-  // Send resetToken via email (unhashed)
-  // e.g., sendEmail(user.email, resetToken);
+  const resetUrl = `${process.env.APP_BASE_URL}/api/auth/reset-password?token=${resetToken}`;
 
-  return resetToken; // For testing, normally do not return token in API response
+  await emailService.sendPasswordResetEmail(user.email, resetUrl, user.name);
+
+  return { message: 'Password reset email sent' };
 }
 
 export async function resetPassword(resetToken: string, newPassword: string) {

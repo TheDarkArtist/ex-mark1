@@ -1,4 +1,6 @@
-import { ConflictError } from '../../../utils/app-error';
+import { EmailService } from '../../../services/email/email.service';
+import { AppError, ConflictError } from '../../../utils/app-error';
+import { generateVerificationToken } from '../../../utils/token';
 import User from './users.model';
 import type { IUser } from "./users.model"
 import bcrypt from 'bcrypt';
@@ -29,6 +31,8 @@ interface UpdateUserInput {
   };
 }
 
+const emailService = new EmailService();
+
 export async function createUser(data: CreateUserInput): Promise<IUser> {
   const existingUser = await User.findOne({ email: data.email });
   if (existingUser) {
@@ -42,8 +46,18 @@ export async function createUser(data: CreateUserInput): Promise<IUser> {
     password: hashedPassword,
   });
 
-  return user.save();
+  const savedUser = await user.save();
+
+  const verificationToken = generateVerificationToken({ id: savedUser.id, email: savedUser.email });
+
+  emailService.sendVerificationEmail(savedUser.email, verificationToken, savedUser.name).catch((err) => {
+    const appError = new AppError('Failed to send verification email', 500);
+    console.error(appError, err);
+  });
+
+  return savedUser;
 }
+
 
 export async function getUserById(id: string): Promise<IUser | null> {
   return User.findById(id).exec();

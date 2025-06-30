@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import * as authService from './auth.service';
-import type { LoginUserInput, RequestPasswordResetInput, ResetPasswordInput } from './auth.schema';
+import type { LoginUserInput, RequestPasswordResetInput } from './auth.schema';
+import { BadRequestError } from '../../../utils/app-error';
 
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
@@ -34,9 +35,47 @@ export async function requestPasswordReset(req: Request, res: Response, next: Ne
 
 export async function resetPassword(req: Request, res: Response, next: NextFunction) {
   try {
-    const { resetToken, newPassword }: ResetPasswordInput = req.body;
+    const resetToken = req.body.resetToken || req.query.token;
+    const newPassword = req.body.newPassword;
+
+    if (!resetToken || typeof resetToken !== 'string') {
+      throw new BadRequestError("Reset token is required and must be a string")
+    }
+
+    if (!newPassword || typeof newPassword !== 'string') {
+      throw new BadRequestError("New password is required and must be a string")
+    }
+
     await authService.resetPassword(resetToken, newPassword);
-    res.status(200).json({ message: 'Password reset successful' });
+
+    res.json({ message: 'Password reset successful' });
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+export async function verifyEmail(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { token } = req.query;
+    if (!token || typeof token !== 'string') {
+      throw new BadRequestError("Verification token is missing")
+    }
+
+    await authService.verifyEmail(token);
+    res.json({ message: 'Email verified successfully' });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function resendVerificationEmail(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { email } = req.body;
+    if (!email) throw new BadRequestError("Email is required")
+
+    const result = await authService.resendVerificationEmail(email);
+    res.json(result);
   } catch (error) {
     next(error);
   }

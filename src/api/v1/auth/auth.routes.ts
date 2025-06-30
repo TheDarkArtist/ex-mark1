@@ -3,13 +3,17 @@ import {
   login,
   refreshToken,
   requestPasswordReset,
+  resendVerificationEmail,
   resetPassword,
+  verifyEmail,
 } from './auth.controller';
 import {
   loginUserSchema,
   refreshTokenSchema,
   requestPasswordResetSchema,
+  resendVerificationSchema,
   resetPasswordSchema,
+  verifyEmailSchema,
 } from './auth.schema';
 import { validateRequest } from '../../../middlewares/validate-request';
 
@@ -22,6 +26,10 @@ router.post('/refresh-token', validateRequest({ body: refreshTokenSchema }), ref
 router.post('/request-password-reset', validateRequest({ body: requestPasswordResetSchema }), requestPasswordReset);
 
 router.post('/reset-password', validateRequest({ body: resetPasswordSchema }), resetPassword);
+
+router.get('/verify-email', validateRequest({ params: verifyEmailSchema }), verifyEmail);
+
+router.post('/resend-verification', validateRequest({ body: resendVerificationSchema }), resendVerificationEmail);
 
 export default router;
 
