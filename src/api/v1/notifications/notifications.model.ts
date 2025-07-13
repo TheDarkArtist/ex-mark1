@@ -1,29 +1,29 @@
-import mongoose, { Schema, Document, Model } from "mongoose"
+import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface INotification extends Document {
-  userId: mongoose.Types.ObjectId
-  type: "order" | "promotion" | "system" | "other"
-  title: string
-  description?: string
-  read: boolean
-  metadata?: Record<string, any>
-  expiresAt?: Date
-  createdAt: Date
-  updatedAt: Date
+  userId: mongoose.Types.ObjectId;
+  type: 'order' | 'promotion' | 'system' | 'other';
+  title: string;
+  description?: string;
+  read: boolean;
+  metadata?: Record<string, any>;
+  expiresAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const notificationSchema = new Schema<INotification>(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
       index: true,
     },
     type: {
       type: String,
-      enum: ["order", "promotion", "system", "other"],
-      default: "other",
+      enum: ['order', 'promotion', 'system', 'other'],
+      default: 'other',
     },
     title: {
       type: String,
@@ -47,12 +47,12 @@ const notificationSchema = new Schema<INotification>(
       index: { expireAfterSeconds: 0 },
     },
   },
-  { timestamps: true }
-)
+  { timestamps: true },
+);
 
 const Notification: Model<INotification> = mongoose.model<INotification>(
-  "Notification",
-  notificationSchema
-)
+  'Notification',
+  notificationSchema,
+);
 
-export default Notification
+export default Notification;

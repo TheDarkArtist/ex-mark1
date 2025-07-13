@@ -22,13 +22,14 @@ export const resendVerificationSchema = z.object({
 });
 
 export const verifyEmailSchema = z.object({
-  token: z.string()
+  token: z.string(),
 });
 
 export type verifyEmailInput = z.infer<typeof verifyEmailSchema>;
 export type ResendVerificationInput = z.infer<typeof resendVerificationSchema>;
 export type LoginUserInput = z.infer<typeof loginUserSchema>;
 export type RefreshTokenInput = z.infer<typeof refreshTokenSchema>;
-export type RequestPasswordResetInput = z.infer<typeof requestPasswordResetSchema>;
+export type RequestPasswordResetInput = z.infer<
+  typeof requestPasswordResetSchema
+>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
-

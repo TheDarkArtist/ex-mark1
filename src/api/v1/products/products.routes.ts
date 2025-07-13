@@ -13,15 +13,18 @@ router.post(
   authenticateUser,
   authorizeAdmin,
   validateRequest({ body: createProductSchema }),
-  productController.createProduct
+  productController.createProduct,
 );
 
 router.put(
   '/:id',
   authenticateUser,
   authorizeAdmin,
-  validateRequest({ params: productParamsSchema, body: createProductSchema.partial() }),
-  productController.updateProduct
+  validateRequest({
+    params: productParamsSchema,
+    body: createProductSchema.partial(),
+  }),
+  productController.updateProduct,
 );
 
 router.delete(
@@ -29,11 +32,14 @@ router.delete(
   authenticateUser,
   authorizeAdmin,
   validateRequest({ params: productParamsSchema }),
-  productController.deleteProduct
+  productController.deleteProduct,
 );
 
-router.get('/:id', validateRequest({ params: productParamsSchema }), productController.getProductById);
+router.get(
+  '/:id',
+  validateRequest({ params: productParamsSchema }),
+  productController.getProductById,
+);
 router.get('/', productController.listProducts);
 
 export default router;
-

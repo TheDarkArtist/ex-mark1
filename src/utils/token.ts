@@ -9,6 +9,7 @@ export function generateVerificationToken(user: { id: string; email: string }) {
     email: user.email,
   };
 
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: VERIFICATION_TOKEN_EXPIRY });
+  return jwt.sign(payload, JWT_SECRET, {
+    expiresIn: VERIFICATION_TOKEN_EXPIRY,
+  });
 }
-

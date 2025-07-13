@@ -16,7 +16,7 @@ export class CartController {
     try {
       const userId = this.getUserId(req);
       if (!userId) {
-        throw new AuthorizationError("Unauthorized")
+        throw new AuthorizationError('Unauthorized');
       }
       const cart = await this.cartService.getCartByUserId(userId);
       res.json(cart);
@@ -29,11 +29,15 @@ export class CartController {
     try {
       const userId = this.getUserId(req);
       if (!userId) {
-        throw new AuthorizationError("Unauthorized")
+        throw new AuthorizationError('Unauthorized');
       }
 
       const { product, quantity, priceAtAddition } = req.body;
-      const updatedCart = await this.cartService.addItemToCart(userId, { product, quantity, priceAtAddition });
+      const updatedCart = await this.cartService.addItemToCart(userId, {
+        product,
+        quantity,
+        priceAtAddition,
+      });
       res.status(201).json(updatedCart);
     } catch (error) {
       next(error);
@@ -44,12 +48,16 @@ export class CartController {
     try {
       const userId = this.getUserId(req);
       if (!userId) {
-        throw new AuthorizationError("Unauthorized")
+        throw new AuthorizationError('Unauthorized');
       }
 
       const productId = req.params.productId;
       const updates = req.body;
-      const updatedCart = await this.cartService.updateCartItem(userId, productId, updates);
+      const updatedCart = await this.cartService.updateCartItem(
+        userId,
+        productId,
+        updates,
+      );
       res.json(updatedCart);
     } catch (error) {
       next(error);
@@ -60,11 +68,14 @@ export class CartController {
     try {
       const userId = this.getUserId(req);
       if (!userId) {
-        throw new AuthorizationError("Unauthorized")
+        throw new AuthorizationError('Unauthorized');
       }
 
       const productId = req.params.productId;
-      const updatedCart = await this.cartService.removeItemFromCart(userId, productId);
+      const updatedCart = await this.cartService.removeItemFromCart(
+        userId,
+        productId,
+      );
       res.json(updatedCart);
     } catch (error) {
       next(error);
@@ -75,7 +86,7 @@ export class CartController {
     try {
       const userId = this.getUserId(req);
       if (!userId) {
-        throw new AuthorizationError("Unauthorized")
+        throw new AuthorizationError('Unauthorized');
       }
 
       const clearedCart = await this.cartService.clearCart(userId);
@@ -85,4 +96,3 @@ export class CartController {
     }
   };
 }
-

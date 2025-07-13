@@ -6,7 +6,9 @@ import Stripe from 'stripe';
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
 if (!stripeSecretKey) {
-  throw new Error('STRIPE_SECRET_KEY environment variable is not set. Application cannot start.');
+  throw new Error(
+    'STRIPE_SECRET_KEY environment variable is not set. Application cannot start.',
+  );
 }
 
 // Initialize Stripe with explicit API version (adjust as needed)
@@ -21,7 +23,7 @@ export class PaymentService {
     userId: string,
     orderId: string,
     amount: number,
-    currency = 'usd'
+    currency = 'usd',
   ): Promise<{ payment: IPayment; clientSecret: string }> {
     // Validate MongoDB ObjectIds
     if (!Types.ObjectId.isValid(userId)) {
@@ -63,7 +65,10 @@ export class PaymentService {
   /**
    * Update payment status by providerPaymentId (e.g., Stripe PaymentIntent ID).
    */
-  async updatePaymentStatus(providerPaymentId: string, status: PaymentStatus): Promise<IPayment> {
+  async updatePaymentStatus(
+    providerPaymentId: string,
+    status: PaymentStatus,
+  ): Promise<IPayment> {
     const payment = await Payment.findOne({ providerPaymentId });
     if (!payment) {
       throw new NotFoundError('Payment not found');
@@ -85,4 +90,3 @@ export class PaymentService {
     return Payment.findById(paymentId).exec();
   }
 }
-

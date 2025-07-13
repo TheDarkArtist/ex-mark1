@@ -1,4 +1,4 @@
-import { Router } from "express"
+import { Router } from 'express';
 import {
   registerUser,
   updateUser,
@@ -6,42 +6,42 @@ import {
   getUserById,
   getUserByEmail,
   listUsers,
-} from "./users.controller"
+} from './users.controller';
 import {
   registerUserSchema,
   updateUserSchema,
   deleteUserSchema,
   getUserByEmailSchema,
-} from "./users.schema"
-import { validateRequest } from "../../../middlewares/validate-request"
-import { authenticateUser } from "@/middlewares/authenticate-user"
+} from './users.schema';
+import { validateRequest } from '../../../middlewares/validate-request';
+import { authenticateUser } from '@/middlewares/authenticate-user';
 
-const router = Router()
+const router = Router();
 
-router.get("/:userId", getUserById)
-router.get("/", authenticateUser, listUsers)
+router.get('/:userId', getUserById);
+router.get('/', authenticateUser, listUsers);
 router.post(
-  "/by-email",
+  '/by-email',
   validateRequest({ body: getUserByEmailSchema }),
-  getUserByEmail
-)
+  getUserByEmail,
+);
 
 router.post(
-  "/register",
+  '/register',
   validateRequest({ body: registerUserSchema }),
-  registerUser
-)
+  registerUser,
+);
 
 router.put(
-  "/:userId",
+  '/:userId',
   validateRequest({ params: deleteUserSchema, body: updateUserSchema }),
-  updateUser
-)
+  updateUser,
+);
 
 router.delete(
-  "/:userId",
+  '/:userId',
   validateRequest({ params: deleteUserSchema }),
-  deleteUser
-)
+  deleteUser,
+);
 
-export default router
+export default router;

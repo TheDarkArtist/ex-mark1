@@ -16,34 +16,33 @@ router.post(
   '/',
   authenticateUser,
   validateRequest({ body: createCategorySchema }),
-  categoryController.createCategory
+  categoryController.createCategory,
 );
 
 router.get(
   '/',
   validateRequest({ query: listCategoriesQuerySchema }),
-  categoryController.listCategories
+  categoryController.listCategories,
 );
 
 router.get(
   '/:id',
   validateRequest({ params: categoryParamsSchema }),
-  categoryController.getCategoryById
+  categoryController.getCategoryById,
 );
 
 router.put(
   '/:id',
   authenticateUser,
   validateRequest({ params: categoryParamsSchema, body: updateCategorySchema }),
-  categoryController.updateCategory
+  categoryController.updateCategory,
 );
 
 router.delete(
   '/:id',
   authenticateUser,
   validateRequest({ params: categoryParamsSchema }),
-  categoryController.deleteCategory
+  categoryController.deleteCategory,
 );
 
 export default router;
-

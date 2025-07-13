@@ -15,19 +15,35 @@ const orderController = new OrderController();
 
 router.use(authenticateUser);
 
-router.post('/', validateRequest({ body: createOrderSchema }), orderController.createOrder);
+router.post(
+  '/',
+  validateRequest({ body: createOrderSchema }),
+  orderController.createOrder,
+);
 
-router.get('/', validateRequest({ query: listOrdersQuerySchema }), orderController.listOrders);
+router.get(
+  '/',
+  validateRequest({ query: listOrdersQuerySchema }),
+  orderController.listOrders,
+);
 
-router.get('/:id', validateRequest({ params: orderParamsSchema }), orderController.getOrderById);
+router.get(
+  '/:id',
+  validateRequest({ params: orderParamsSchema }),
+  orderController.getOrderById,
+);
 
 router.put(
   '/:id',
   validateRequest({ params: orderParamsSchema, body: updateOrderSchema }),
-  orderController.updateOrder
+  orderController.updateOrder,
 );
 
-router.delete('/:id', validateRequest({ params: orderParamsSchema }), authorizeAdmin, orderController.deleteOrder);
+router.delete(
+  '/:id',
+  validateRequest({ params: orderParamsSchema }),
+  authorizeAdmin,
+  orderController.deleteOrder,
+);
 
 export default router;
-

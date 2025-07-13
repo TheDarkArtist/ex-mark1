@@ -19,18 +19,22 @@ const cartItemSchema = new Schema<ICartItem>(
     quantity: { type: Number, required: true, min: 1 },
     priceAtAddition: { type: Number, required: true, min: 0 },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const cartSchema = new Schema<ICart>(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      unique: true,
+    },
     items: { type: [cartItemSchema], default: [] },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Cart: Model<ICart> = mongoose.model<ICart>('Cart', cartSchema);
 
 export default Cart;
-

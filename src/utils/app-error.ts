@@ -3,7 +3,12 @@ export class AppError extends Error {
   public readonly isOperational: boolean;
   public readonly errors?: any;
 
-  constructor(message: string, statusCode = 500, isOperational = true, errors?: any) {
+  constructor(
+    message: string,
+    statusCode = 500,
+    isOperational = true,
+    errors?: any,
+  ) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
 
@@ -19,7 +24,7 @@ export class AppError extends Error {
 
 export class ValidationError extends AppError {
   constructor(message = 'Validation Error', errors?: any) {
-    console.log(errors)
+    console.log(errors);
     super(message, 400, true, errors);
   }
 }
@@ -106,7 +111,6 @@ export class OrderProcessingError extends AppError {
   }
 }
 
-
 // export class WebhookError extends AppError {
 //   constructor(message = 'Webhook Processing Error', errors?: any) {
 //     super(message, 400, true, errors);
@@ -118,4 +122,3 @@ export class OrderProcessingError extends AppError {
 //     super(message, 400, true, errors);
 //   }
 // }
-

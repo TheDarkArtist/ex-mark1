@@ -1,7 +1,9 @@
 function getEnvVar(name: string): string {
   const value = process.env[name];
   if (!value) {
-    throw new Error(`Environment variable ${name} is required but was not provided.`);
+    throw new Error(
+      `Environment variable ${name} is required but was not provided.`,
+    );
   }
   return value;
 }
@@ -18,4 +20,3 @@ export default {
     baseUrl: getEnvVar('APP_BASE_URL'),
   },
 };
-

@@ -6,7 +6,7 @@ export class ErrorHandler {
     err: unknown,
     _req: Request,
     res: Response,
-    _next: NextFunction
+    _next: NextFunction,
   ): void {
     if (err instanceof SyntaxError && 'body' in err) {
       const jsonError = new AppError('Invalid JSON payload', 400, false);
@@ -20,7 +20,7 @@ export class ErrorHandler {
       const contentLengthError = new AppError(
         'Request body size does not match Content-Length header',
         400,
-        false
+        false,
       );
       return ErrorHandler.sendErrorResponse(contentLengthError, res);
     }
@@ -51,4 +51,3 @@ export class ErrorHandler {
     res.status(err.statusCode).json(responseBody);
   }
 }
-

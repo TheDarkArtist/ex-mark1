@@ -26,7 +26,11 @@ const productSchema = new Schema<IProduct>(
     sku: { type: String, required: true, unique: true },
     price: { type: Number, required: true },
     stock: { type: Number, required: true, default: 0 },
-    category_id: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+    category_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+      required: true,
+    },
     images: { type: [String], default: [] },
     brand: { type: String },
     weight: { type: Number },
@@ -38,8 +42,7 @@ const productSchema = new Schema<IProduct>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export const ProductModel = model<IProduct>('Product', productSchema);
-

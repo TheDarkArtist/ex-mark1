@@ -10,7 +10,9 @@ export class CartService {
       throw new BadRequestError('Invalid user ID');
     }
 
-    let cart = await Cart.findOne({ user: userId }).populate('items.product').exec();
+    let cart = await Cart.findOne({ user: userId })
+      .populate('items.product')
+      .exec();
 
     if (!cart) {
       cart = new Cart({ user: userId, items: [] });
@@ -21,7 +23,11 @@ export class CartService {
   }
 
   // Add or update an item in the user's cart
-  async addItemToCart(userId: string, productId: string, quantity: number): Promise<ICart> {
+  async addItemToCart(
+    userId: string,
+    productId: string,
+    quantity: number,
+  ): Promise<ICart> {
     if (!Types.ObjectId.isValid(productId)) {
       throw new BadRequestError('Invalid product ID');
     }
@@ -30,7 +36,9 @@ export class CartService {
     }
 
     // Fetch product price from DB (price snapshot)
-    const product = await ProductModel.findById(productId).select('price').exec();
+    const product = await ProductModel.findById(productId)
+      .select('price')
+      .exec();
     if (!product) {
       throw new NotFoundError('Product not found');
     }
@@ -39,7 +47,9 @@ export class CartService {
 
     const cart = await this.getCartByUserId(userId);
 
-    const existingItemIndex = cart.items.findIndex(ci => ci.product.toString() === productId);
+    const existingItemIndex = cart.items.findIndex(
+      (ci) => ci.product.toString() === productId,
+    );
 
     if (existingItemIndex >= 0) {
       cart.items[existingItemIndex].quantity += quantity;
@@ -56,27 +66,32 @@ export class CartService {
     return cart.populate('items.product');
   }
 
-
   // Update quantity or price of a specific item in cart
-  async updateCartItem(userId: string, productId: string, updates: { quantity?: number; priceAtAddition?: number }): Promise<ICart> {
+  async updateCartItem(
+    userId: string,
+    productId: string,
+    updates: { quantity?: number; priceAtAddition?: number },
+  ): Promise<ICart> {
     if (!Types.ObjectId.isValid(userId) || !Types.ObjectId.isValid(productId)) {
       throw new BadRequestError('Invalid user or product ID');
     }
 
     const cart = await this.getCartByUserId(userId);
 
-    const item = cart.items.find(ci => ci.product.toString() === productId);
+    const item = cart.items.find((ci) => ci.product.toString() === productId);
     if (!item) {
       throw new NotFoundError('Product not found in cart');
     }
 
     if (updates.quantity !== undefined) {
-      if (updates.quantity < 1) throw new BadRequestError('Quantity must be at least 1');
+      if (updates.quantity < 1)
+        throw new BadRequestError('Quantity must be at least 1');
       item.quantity = updates.quantity;
     }
 
     if (updates.priceAtAddition !== undefined) {
-      if (updates.priceAtAddition < 0) throw new BadRequestError('Price must be non-negative');
+      if (updates.priceAtAddition < 0)
+        throw new BadRequestError('Price must be non-negative');
       item.priceAtAddition = updates.priceAtAddition;
     }
 
@@ -93,7 +108,7 @@ export class CartService {
     const cart = await this.getCartByUserId(userId);
 
     const initialLength = cart.items.length;
-    cart.items = cart.items.filter(ci => ci.product.toString() !== productId);
+    cart.items = cart.items.filter((ci) => ci.product.toString() !== productId);
 
     if (cart.items.length === initialLength) {
       throw new NotFoundError('Product not found in cart');
@@ -115,4 +130,3 @@ export class CartService {
     return cart;
   }
 }
-

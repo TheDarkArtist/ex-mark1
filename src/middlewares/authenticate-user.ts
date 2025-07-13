@@ -8,7 +8,11 @@ export interface AuthRequest extends Request {
   user?: any;
 }
 
-export const authenticateUser = (req: AuthRequest, _res: Response, next: NextFunction) => {
+export const authenticateUser = (
+  req: AuthRequest,
+  _res: Response,
+  next: NextFunction,
+) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -25,4 +29,3 @@ export const authenticateUser = (req: AuthRequest, _res: Response, next: NextFun
     return next(new AuthorizationError('Invalid or expired token'));
   }
 };
-

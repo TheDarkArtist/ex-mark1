@@ -1,35 +1,35 @@
-import { Router } from "express"
-import { CartController } from "./cart.controller"
-import { authenticateUser } from "../../../middlewares/authenticate-user"
-import { validateRequest } from "../../../middlewares/validate-request"
-import { cartItemSchema, cartParamsSchema } from "./cart.schema"
+import { Router } from 'express';
+import { CartController } from './cart.controller';
+import { authenticateUser } from '../../../middlewares/authenticate-user';
+import { validateRequest } from '../../../middlewares/validate-request';
+import { cartItemSchema, cartParamsSchema } from './cart.schema';
 
-const router = Router()
-const cartController = new CartController()
+const router = Router();
+const cartController = new CartController();
 
-router.get("/", authenticateUser, cartController.getCart)
+router.get('/', authenticateUser, cartController.getCart);
 
 router.post(
-  "/",
+  '/',
   authenticateUser,
   validateRequest({ body: cartItemSchema }),
-  cartController.addItem
-)
+  cartController.addItem,
+);
 
 router.put(
-  "/:productId",
+  '/:productId',
   authenticateUser,
   validateRequest({ params: cartParamsSchema, body: cartItemSchema.partial() }),
-  cartController.updateItem
-)
+  cartController.updateItem,
+);
 
 router.delete(
-  "/:productId",
+  '/:productId',
   authenticateUser,
   validateRequest({ params: cartParamsSchema }),
-  cartController.removeItem
-)
+  cartController.removeItem,
+);
 
-router.delete("/", authenticateUser, cartController.clearCart)
+router.delete('/', authenticateUser, cartController.clearCart);
 
-export default router
+export default router;

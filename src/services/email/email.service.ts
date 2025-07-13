@@ -38,7 +38,10 @@ export class EmailService {
 
   async sendVerificationEmail(to: string, token: string, userName: string) {
     const verificationUrl = `${config.app.baseUrl}/api/auth/verify-email?token=${token}`;
-    const html = emailTemplates.verificationEmailTemplate(verificationUrl, userName);
+    const html = emailTemplates.verificationEmailTemplate(
+      verificationUrl,
+      userName,
+    );
     const subject = 'Verify your email address';
 
     return this.sendEmail(to, subject, html);
@@ -64,6 +67,4 @@ export class EmailService {
 
     return this.sendEmail(to, subject, html, text);
   }
-
 }
-

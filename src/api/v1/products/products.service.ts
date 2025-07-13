@@ -26,7 +26,10 @@ export class ProductService {
     return ProductModel.findById(id).exec();
   }
 
-  async updateProduct(id: string, data: Partial<IProduct>): Promise<IProduct | null> {
+  async updateProduct(
+    id: string,
+    data: Partial<IProduct>,
+  ): Promise<IProduct | null> {
     if (!Types.ObjectId.isValid(id)) return null;
     return ProductModel.findByIdAndUpdate(id, data, { new: true }).exec();
   }
@@ -38,7 +41,7 @@ export class ProductService {
 
   async listProducts(
     filters: ProductFilters = {},
-    pagination: PaginationOptions = {}
+    pagination: PaginationOptions = {},
   ): Promise<{ products: IProduct[]; total: number }> {
     const query: any = {};
 
@@ -60,7 +63,8 @@ export class ProductService {
     }
 
     const page = pagination.page && pagination.page > 0 ? pagination.page : 1;
-    const limit = pagination.limit && pagination.limit > 0 ? pagination.limit : 10;
+    const limit =
+      pagination.limit && pagination.limit > 0 ? pagination.limit : 10;
     const skip = (page - 1) * limit;
 
     const sortField = pagination.sortBy || 'createdAt';

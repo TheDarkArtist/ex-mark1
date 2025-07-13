@@ -11,7 +11,7 @@ import type { z } from 'zod';
 /* Helpers                                                             */
 /* ------------------------------------------------------------------ */
 
-const objectId = '0123456789abcdef01234567';                // 24‑char stub
+const objectId = '0123456789abcdef01234567'; // 24‑char stub
 const url1 = 'https://cdn.example.com/img1.png';
 
 /**
@@ -36,7 +36,7 @@ describe('createProductSchema', () => {
 
   it('accepts minimal valid payload', () => {
     const parsed = createProductSchema.parse(base);
-    expect(parsed.stock).toBe(0);             // default applied
+    expect(parsed.stock).toBe(0); // default applied
   });
 
   it('accepts full valid payload', () => {
@@ -173,4 +173,3 @@ describe('listProductsQuerySchema', () => {
     shouldFail(listProductsQuerySchema, { sortOrder: 'up' });
   });
 });
-

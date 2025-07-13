@@ -37,4 +37,3 @@ export const validateRequest = (schemas: ValidationSchemas): RequestHandler => {
     }
   };
 };
-

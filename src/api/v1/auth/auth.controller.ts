@@ -6,14 +6,21 @@ import { BadRequestError } from '../../../utils/app-error';
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     const loginInput: LoginUserInput = req.body;
-    const { accessToken, refreshToken, user } = await authService.loginUser(loginInput.email, loginInput.password);
+    const { accessToken, refreshToken, user } = await authService.loginUser(
+      loginInput.email,
+      loginInput.password,
+    );
     res.status(200).json({ accessToken, refreshToken, user });
   } catch (error) {
     next(error);
   }
 }
 
-export async function refreshToken(req: Request, res: Response, next: NextFunction) {
+export async function refreshToken(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const { refreshToken } = req.body;
     const tokens = await authService.refreshToken(refreshToken);
@@ -23,7 +30,11 @@ export async function refreshToken(req: Request, res: Response, next: NextFuncti
   }
 }
 
-export async function requestPasswordReset(req: Request, res: Response, next: NextFunction) {
+export async function requestPasswordReset(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const { email }: RequestPasswordResetInput = req.body;
     await authService.requestPasswordReset(email);
@@ -33,17 +44,23 @@ export async function requestPasswordReset(req: Request, res: Response, next: Ne
   }
 }
 
-export async function resetPassword(req: Request, res: Response, next: NextFunction) {
+export async function resetPassword(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const resetToken = req.body.resetToken || req.query.token;
     const newPassword = req.body.newPassword;
 
     if (!resetToken || typeof resetToken !== 'string') {
-      throw new BadRequestError("Reset token is required and must be a string")
+      throw new BadRequestError('Reset token is required and must be a string');
     }
 
     if (!newPassword || typeof newPassword !== 'string') {
-      throw new BadRequestError("New password is required and must be a string")
+      throw new BadRequestError(
+        'New password is required and must be a string',
+      );
     }
 
     await authService.resetPassword(resetToken, newPassword);
@@ -54,12 +71,15 @@ export async function resetPassword(req: Request, res: Response, next: NextFunct
   }
 }
 
-
-export async function verifyEmail(req: Request, res: Response, next: NextFunction) {
+export async function verifyEmail(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const { token } = req.query;
     if (!token || typeof token !== 'string') {
-      throw new BadRequestError("Verification token is missing")
+      throw new BadRequestError('Verification token is missing');
     }
 
     await authService.verifyEmail(token);
@@ -69,10 +89,14 @@ export async function verifyEmail(req: Request, res: Response, next: NextFunctio
   }
 }
 
-export async function resendVerificationEmail(req: Request, res: Response, next: NextFunction) {
+export async function resendVerificationEmail(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const { email } = req.body;
-    if (!email) throw new BadRequestError("Email is required")
+    if (!email) throw new BadRequestError('Email is required');
 
     const result = await authService.resendVerificationEmail(email);
     res.json(result);
@@ -80,4 +104,3 @@ export async function resendVerificationEmail(req: Request, res: Response, next:
     next(error);
   }
 }
-

@@ -29,7 +29,10 @@ export class CategoryService {
     return Category.findById(id).exec();
   }
 
-  async updateCategory(id: string, data: Partial<ICategory>): Promise<ICategory | null> {
+  async updateCategory(
+    id: string,
+    data: Partial<ICategory>,
+  ): Promise<ICategory | null> {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestError('Invalid category ID');
     }
@@ -51,7 +54,7 @@ export class CategoryService {
 
   async listCategories(
     filters: ListCategoriesFilters,
-    pagination: PaginationOptions
+    pagination: PaginationOptions,
   ): Promise<{ categories: ICategory[]; total: number }> {
     const query: any = {};
 
@@ -79,4 +82,3 @@ export class CategoryService {
     return { categories, total };
   }
 }
-

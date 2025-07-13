@@ -1,9 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import * as userService from './users.service';
-import type {
-  RegisterUserInput,
-  UpdateUserInput,
-} from './users.schema';
+import type { RegisterUserInput, UpdateUserInput } from './users.schema';
 import { BadRequestError, NotFoundError } from '../../../utils/app-error';
 
 interface UserIdParams {
@@ -14,8 +11,11 @@ interface UserEmailBody {
   email: string;
 }
 
-
-export async function registerUser(req: Request, res: Response, next: NextFunction) {
+export async function registerUser(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const userInput: RegisterUserInput = req.body;
 
@@ -26,7 +26,6 @@ export async function registerUser(req: Request, res: Response, next: NextFuncti
       name: user.name,
       email: user.email,
     });
-
   } catch (error) {
     next(error);
   }
@@ -35,7 +34,7 @@ export async function registerUser(req: Request, res: Response, next: NextFuncti
 export async function updateUser(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { userId } = req.params;
@@ -59,11 +58,10 @@ export async function updateUser(
   }
 }
 
-
 export async function deleteUser(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { userId } = req.params;
@@ -86,14 +84,14 @@ export async function deleteUser(
 export async function getUserById(
   req: Request<UserIdParams>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { userId } = req.params;
 
     const user = await userService.getUserById(userId);
 
-    if (!user) throw new NotFoundError("User not found");
+    if (!user) throw new NotFoundError('User not found');
 
     res.status(200).json({
       id: user.id.toString(),
@@ -101,24 +99,22 @@ export async function getUserById(
       email: user.email,
       role: user.role,
       isActive: user.isActive,
-    })
-
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
-
 
 export async function getUserByEmail(
   req: Request<{}, {}, UserEmailBody>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { email } = req.body;
 
     if (!email) {
-      throw new BadRequestError("Email is required");
+      throw new BadRequestError('Email is required');
     }
 
     const user = await userService.getUserByEmail(email);
@@ -142,7 +138,7 @@ export async function getUserByEmail(
 export async function listUsers(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const limit = parseInt(req.query.limit as string, 10) || 20;
@@ -154,4 +150,3 @@ export async function listUsers(
     next(error);
   }
 }
-

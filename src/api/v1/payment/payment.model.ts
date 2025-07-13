@@ -28,10 +28,12 @@ const paymentSchema = new Schema<IPayment>(
     paymentProvider: { type: String, required: true },
     providerPaymentId: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const Payment: Model<IPayment> = mongoose.model<IPayment>('Payment', paymentSchema);
+const Payment: Model<IPayment> = mongoose.model<IPayment>(
+  'Payment',
+  paymentSchema,
+);
 
 export default Payment;
-

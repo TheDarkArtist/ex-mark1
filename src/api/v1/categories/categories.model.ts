@@ -26,12 +26,14 @@ const categorySchema = new Schema<ICategory>(
       default: null,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 categorySchema.index({ parentCategory: 1 });
 
-const Category: Model<ICategory> = mongoose.model<ICategory>('Category', categorySchema);
+const Category: Model<ICategory> = mongoose.model<ICategory>(
+  'Category',
+  categorySchema,
+);
 
 export default Category;
-

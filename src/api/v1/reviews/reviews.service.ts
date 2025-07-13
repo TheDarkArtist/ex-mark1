@@ -33,7 +33,10 @@ export class ReviewService {
     return Review.findById(id).exec();
   }
 
-  async updateReview(id: string, data: Partial<IReview>): Promise<IReview | null> {
+  async updateReview(
+    id: string,
+    data: Partial<IReview>,
+  ): Promise<IReview | null> {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestError('Invalid review ID');
     }
@@ -52,7 +55,7 @@ export class ReviewService {
 
   async listReviews(
     filters: ListReviewsFilters,
-    pagination: PaginationOptions
+    pagination: PaginationOptions,
   ): Promise<{ reviews: IReview[]; total: number }> {
     const query: Record<string, any> = {};
 
@@ -84,4 +87,3 @@ export class ReviewService {
     return { reviews, total };
   }
 }
-

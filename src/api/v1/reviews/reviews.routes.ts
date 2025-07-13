@@ -16,19 +16,19 @@ router.post(
   '/',
   authenticateUser,
   validateRequest({ body: createReviewSchema }),
-  reviewController.createReview
+  reviewController.createReview,
 );
 
 router.get(
   '/',
   validateRequest({ query: listReviewsQuerySchema }),
-  reviewController.listReviews
+  reviewController.listReviews,
 );
 
 router.get(
   '/:id',
   validateRequest({ params: reviewParamsSchema }),
-  reviewController.getReviewById
+  reviewController.getReviewById,
 );
 
 router.put(
@@ -36,16 +36,14 @@ router.put(
   authenticateUser,
   validateRequest({ params: reviewParamsSchema }),
   validateRequest({ body: updateReviewSchema }),
-  reviewController.updateReview
+  reviewController.updateReview,
 );
-
 
 router.delete(
   '/:id',
   authenticateUser,
   validateRequest({ params: reviewParamsSchema }),
-  reviewController.deleteReview
+  reviewController.deleteReview,
 );
 
 export default router;
-

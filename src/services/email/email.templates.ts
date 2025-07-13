@@ -1,4 +1,7 @@
-export function verificationEmailTemplate(verificationUrl: string, userName: string) {
+export function verificationEmailTemplate(
+  verificationUrl: string,
+  userName: string,
+) {
   return `
     <h1>Hello, ${userName}</h1>
     <p>Please verify your email by clicking the link below:</p>
@@ -27,4 +30,3 @@ export function notificationEmailTemplate(message: string) {
     <p>${message}</p>
   `;
 }
-

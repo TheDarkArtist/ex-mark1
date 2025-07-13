@@ -15,7 +15,6 @@ interface PaginationOptions {
   sortOrder: 'asc' | 'desc';
 }
 
-
 export class OrderController {
   private orderService: OrderService;
 
@@ -23,14 +22,29 @@ export class OrderController {
     this.orderService = new OrderService();
   }
 
-  private validStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'] as const;
-  private validPaymentStatuses = ['pending', 'paid', 'failed', 'refunded'] as const;
+  private validStatuses = [
+    'pending',
+    'processing',
+    'shipped',
+    'delivered',
+    'cancelled',
+  ] as const;
+  private validPaymentStatuses = [
+    'pending',
+    'paid',
+    'failed',
+    'refunded',
+  ] as const;
 
-  private isValidStatus(status: any): status is typeof this.validStatuses[number] {
+  private isValidStatus(
+    status: any,
+  ): status is (typeof this.validStatuses)[number] {
     return this.validStatuses.includes(status);
   }
 
-  private isValidPaymentStatus(status: any): status is typeof this.validPaymentStatuses[number] {
+  private isValidPaymentStatus(
+    status: any,
+  ): status is (typeof this.validPaymentStatuses)[number] {
     return this.validPaymentStatuses.includes(status);
   }
 
@@ -61,7 +75,10 @@ export class OrderController {
     try {
       const orderId = req.params.id;
       const updateData = req.body;
-      const updatedOrder = await this.orderService.updateOrder(orderId, updateData);
+      const updatedOrder = await this.orderService.updateOrder(
+        orderId,
+        updateData,
+      );
       res.json(updatedOrder);
     } catch (error) {
       next(error);
@@ -88,12 +105,14 @@ export class OrderController {
 
       const paymentStatusRaw = req.query.paymentStatus;
       const paymentStatus =
-        typeof paymentStatusRaw === 'string' && this.isValidPaymentStatus(paymentStatusRaw)
+        typeof paymentStatusRaw === 'string' &&
+        this.isValidPaymentStatus(paymentStatusRaw)
           ? paymentStatusRaw
           : undefined;
 
       const filters: ListOrdersFilters = {
-        user_id: typeof req.query.user_id === 'string' ? req.query.user_id : undefined,
+        user_id:
+          typeof req.query.user_id === 'string' ? req.query.user_id : undefined,
         status,
         paymentStatus,
       };
@@ -104,11 +123,15 @@ export class OrderController {
       const pagination: PaginationOptions = {
         page: req.query.page ? Number(req.query.page) : 1,
         limit: req.query.limit ? Number(req.query.limit) : 10,
-        sortBy: (typeof req.query.sortBy === 'string' ? req.query.sortBy : 'createdAt'),
+        sortBy:
+          typeof req.query.sortBy === 'string' ? req.query.sortBy : 'createdAt',
         sortOrder,
       };
 
-      const { orders, total } = await this.orderService.listOrders(filters, pagination);
+      const { orders, total } = await this.orderService.listOrders(
+        filters,
+        pagination,
+      );
 
       res.json({
         data: orders,
@@ -122,6 +145,4 @@ export class OrderController {
       next(error);
     }
   };
-
 }
-

@@ -11,34 +11,43 @@ export class ProductController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
   getProductById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const product = await productService.getProductById(req.params.id);
-      product ? res.json(product) : res.status(404).json({ message: 'Product not found' });
+      product
+        ? res.json(product)
+        : res.status(404).json({ message: 'Product not found' });
     } catch (error) {
       next(error);
     }
-  }
+  };
 
   updateProduct = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const updatedProduct = await productService.updateProduct(req.params.id, req.body);
-      updatedProduct ? res.json(updatedProduct) : res.status(404).json({ message: 'Product not found' });
+      const updatedProduct = await productService.updateProduct(
+        req.params.id,
+        req.body,
+      );
+      updatedProduct
+        ? res.json(updatedProduct)
+        : res.status(404).json({ message: 'Product not found' });
     } catch (error) {
       next(error);
     }
-  }
+  };
 
   deleteProduct = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const deletedProduct = await productService.deleteProduct(req.params.id);
-      deletedProduct ? res.status(204).send() : res.status(404).json({ message: 'Product not found' });
+      deletedProduct
+        ? res.status(204).send()
+        : res.status(404).json({ message: 'Product not found' });
     } catch (error) {
       next(error);
     }
-  }
+  };
 
   listProducts = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -56,15 +65,17 @@ export class ProductController {
         sortOrder: (req.query.sortOrder as 'asc' | 'desc') || 'asc',
       };
 
-      const { products, total } = await productService.listProducts(filters, pagination);
+      const { products, total } = await productService.listProducts(
+        filters,
+        pagination,
+      );
 
       res.json({
         data: products,
-        meta: { total, page: pagination.page, limit: pagination.limit }
+        meta: { total, page: pagination.page, limit: pagination.limit },
       });
     } catch (error) {
       next(error);
     }
-  }
+  };
 }
-

@@ -21,15 +21,34 @@ const router = Router();
 
 router.post('/login', validateRequest({ body: loginUserSchema }), login);
 
-router.post('/refresh-token', validateRequest({ body: refreshTokenSchema }), refreshToken);
+router.post(
+  '/refresh-token',
+  validateRequest({ body: refreshTokenSchema }),
+  refreshToken,
+);
 
-router.post('/request-password-reset', validateRequest({ body: requestPasswordResetSchema }), requestPasswordReset);
+router.post(
+  '/request-password-reset',
+  validateRequest({ body: requestPasswordResetSchema }),
+  requestPasswordReset,
+);
 
-router.post('/reset-password', validateRequest({ body: resetPasswordSchema }), resetPassword);
+router.post(
+  '/reset-password',
+  validateRequest({ body: resetPasswordSchema }),
+  resetPassword,
+);
 
-router.get('/verify-email', validateRequest({ params: verifyEmailSchema }), verifyEmail);
+router.get(
+  '/verify-email',
+  validateRequest({ params: verifyEmailSchema }),
+  verifyEmail,
+);
 
-router.post('/resend-verification', validateRequest({ body: resendVerificationSchema }), resendVerificationEmail);
+router.post(
+  '/resend-verification',
+  validateRequest({ body: resendVerificationSchema }),
+  resendVerificationEmail,
+);
 
 export default router;
-

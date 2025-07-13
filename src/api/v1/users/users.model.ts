@@ -52,8 +52,7 @@ const UserSchema = new Schema<IUser>(
       country: { type: String },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model<IUser>('User', UserSchema);
-

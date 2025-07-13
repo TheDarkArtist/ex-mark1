@@ -6,7 +6,9 @@ mongoose.set('strictQuery', false);
 
 export async function connectDB() {
   if (!mongoURI) {
-    throw new Error('[-] MongoDB connection string (DB_CONNECTION) is not defined in environment variables');
+    throw new Error(
+      '[-] MongoDB connection string (DB_CONNECTION) is not defined in environment variables',
+    );
   }
 
   try {
@@ -17,4 +19,3 @@ export async function connectDB() {
     process.exit(1);
   }
 }
-

@@ -2,7 +2,7 @@ import { EmailService } from '../../../services/email/email.service';
 import { AppError, ConflictError } from '../../../utils/app-error';
 import { generateVerificationToken } from '../../../utils/token';
 import User from './users.model';
-import type { IUser } from "./users.model"
+import type { IUser } from './users.model';
 import bcrypt from 'bcrypt';
 
 interface CreateUserInput {
@@ -36,7 +36,7 @@ const emailService = new EmailService();
 export async function createUser(data: CreateUserInput): Promise<IUser> {
   const existingUser = await User.findOne({ email: data.email });
   if (existingUser) {
-    throw new ConflictError("Email already in use");
+    throw new ConflictError('Email already in use');
   }
 
   const hashedPassword = await bcrypt.hash(data.password, 12);
@@ -48,16 +48,20 @@ export async function createUser(data: CreateUserInput): Promise<IUser> {
 
   const savedUser = await user.save();
 
-  const verificationToken = generateVerificationToken({ id: savedUser.id, email: savedUser.email });
-
-  emailService.sendVerificationEmail(savedUser.email, verificationToken, savedUser.name).catch((err) => {
-    const appError = new AppError('Failed to send verification email', 500);
-    console.error(appError, err);
+  const verificationToken = generateVerificationToken({
+    id: savedUser.id,
+    email: savedUser.email,
   });
+
+  emailService
+    .sendVerificationEmail(savedUser.email, verificationToken, savedUser.name)
+    .catch((err) => {
+      const appError = new AppError('Failed to send verification email', 500);
+      console.error(appError, err);
+    });
 
   return savedUser;
 }
-
 
 export async function getUserById(id: string): Promise<IUser | null> {
   return User.findById(id).exec();
@@ -67,7 +71,10 @@ export async function getUserByEmail(email: string): Promise<IUser | null> {
   return User.findOne({ email }).exec();
 }
 
-export async function updateUser(id: string, data: UpdateUserInput): Promise<IUser | null> {
+export async function updateUser(
+  id: string,
+  data: UpdateUserInput,
+): Promise<IUser | null> {
   if (data.password) {
     data.password = await bcrypt.hash(data.password, 12);
   }
@@ -78,7 +85,10 @@ export async function deleteUser(id: string): Promise<IUser | null> {
   return User.findByIdAndDelete(id).exec();
 }
 
-export async function listUsers(limit = 20, page = 1): Promise<Partial<IUser>[]> {
+export async function listUsers(
+  limit = 20,
+  page = 1,
+): Promise<Partial<IUser>[]> {
   const skip = (page - 1) * limit;
 
   const users = await User.find()
@@ -87,6 +97,5 @@ export async function listUsers(limit = 20, page = 1): Promise<Partial<IUser>[]>
     .select('-password')
     .exec();
 
-  return users
+  return users;
 }
-

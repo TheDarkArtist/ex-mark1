@@ -5,12 +5,11 @@ import { AuthorizationError, NotFoundError } from '../../../utils/app-error';
 export class PaymentController {
   private paymentService = new PaymentService();
 
-
   createPayment = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.user?.id;
       if (!userId) {
-        throw new AuthorizationError("Unauthorized")
+        throw new AuthorizationError('Unauthorized');
       }
 
       const { orderId, amount, currency } = req.body;
@@ -19,7 +18,7 @@ export class PaymentController {
         userId,
         orderId,
         amount,
-        currency
+        currency,
       );
 
       res.status(201).json({ payment, clientSecret });
@@ -28,11 +27,15 @@ export class PaymentController {
     }
   };
 
-  getPaymentStatus = async (req: Request, res: Response, next: NextFunction) => {
+  getPaymentStatus = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const paymentId = req.params.paymentId;
       const payment = await this.paymentService.getPaymentById(paymentId);
-      if (!payment) throw new NotFoundError("Payment not found")
+      if (!payment) throw new NotFoundError('Payment not found');
 
       res.json(payment);
     } catch (error) {
@@ -40,4 +43,3 @@ export class PaymentController {
     }
   };
 }
-

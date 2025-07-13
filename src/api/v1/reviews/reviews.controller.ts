@@ -35,7 +35,7 @@ export class ReviewController {
     try {
       const review = await this.reviewService.getReviewById(req.params.id);
       if (!review) {
-        throw new NotFoundError("Review not found")
+        throw new NotFoundError('Review not found');
       }
       res.json(review);
     } catch (error) {
@@ -45,9 +45,12 @@ export class ReviewController {
 
   updateReview = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const updatedReview = await this.reviewService.updateReview(req.params.id, req.body);
+      const updatedReview = await this.reviewService.updateReview(
+        req.params.id,
+        req.body,
+      );
       if (!updatedReview) {
-        throw new NotFoundError("Review not found")
+        throw new NotFoundError('Review not found');
       }
       res.json(updatedReview);
     } catch (error) {
@@ -67,8 +70,12 @@ export class ReviewController {
   listReviews = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const filters: ListReviewsFilters = {
-        user_id: typeof req.query.user_id === 'string' ? req.query.user_id : undefined,
-        product_id: typeof req.query.product_id === 'string' ? req.query.product_id : undefined,
+        user_id:
+          typeof req.query.user_id === 'string' ? req.query.user_id : undefined,
+        product_id:
+          typeof req.query.product_id === 'string'
+            ? req.query.product_id
+            : undefined,
       };
 
       const sortOrderRaw = req.query.sortOrder;
@@ -77,11 +84,15 @@ export class ReviewController {
       const pagination: PaginationOptions = {
         page: req.query.page ? Number(req.query.page) : 1,
         limit: req.query.limit ? Number(req.query.limit) : 10,
-        sortBy: typeof req.query.sortBy === 'string' ? req.query.sortBy : 'createdAt',
+        sortBy:
+          typeof req.query.sortBy === 'string' ? req.query.sortBy : 'createdAt',
         sortOrder,
       };
 
-      const { reviews, total } = await this.reviewService.listReviews(filters, pagination);
+      const { reviews, total } = await this.reviewService.listReviews(
+        filters,
+        pagination,
+      );
 
       res.json({
         data: reviews,
@@ -96,4 +107,3 @@ export class ReviewController {
     }
   };
 }
-

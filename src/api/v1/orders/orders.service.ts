@@ -34,13 +34,17 @@ export class OrderService {
         throw new BadRequestError(`Invalid product ID: ${item.product_id}`);
       }
 
-      const product = await this.productService.getProductById(item.product_id.toString());
+      const product = await this.productService.getProductById(
+        item.product_id.toString(),
+      );
       if (!product) {
         throw new BadRequestError(`Product not found: ${item.product_id}`);
       }
 
       if (product.stock < item.quantity) {
-        throw new BadRequestError(`Insufficient stock for product ${product.name}`);
+        throw new BadRequestError(
+          `Insufficient stock for product ${product.name}`,
+        );
       }
 
       totalAmount += product.price * item.quantity;
@@ -76,11 +80,16 @@ export class OrderService {
     return await Order.findById(id).exec();
   }
 
-  async updateOrder(id: string, updateData: Partial<IOrder>): Promise<IOrder | null> {
+  async updateOrder(
+    id: string,
+    updateData: Partial<IOrder>,
+  ): Promise<IOrder | null> {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestError('Invalid order ID');
     }
-    const order = await Order.findByIdAndUpdate(id, updateData, { new: true }).exec();
+    const order = await Order.findByIdAndUpdate(id, updateData, {
+      new: true,
+    }).exec();
     if (!order) {
       throw new NotFoundError('Order not found');
     }
@@ -100,7 +109,7 @@ export class OrderService {
 
   async listOrders(
     filters: ListOrdersFilters,
-    pagination: PaginationOptions
+    pagination: PaginationOptions,
   ): Promise<{ orders: IOrder[]; total: number }> {
     const query: Record<string, any> = {};
 
@@ -132,6 +141,4 @@ export class OrderService {
 
     return { orders, total };
   }
-
 }
-

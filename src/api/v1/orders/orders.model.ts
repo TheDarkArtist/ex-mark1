@@ -39,7 +39,7 @@ const OrderItemSchema: Schema<IOrderItem> = new Schema(
     price: { type: Number, required: true, min: 0 },
     image: { type: String },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const ShippingAddressSchema: Schema<IShippingAddress> = new Schema(
@@ -50,7 +50,7 @@ const ShippingAddressSchema: Schema<IShippingAddress> = new Schema(
     zipCode: { type: String, required: true },
     country: { type: String, required: true },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const OrderSchema: Schema<IOrder> = new Schema(
@@ -76,11 +76,9 @@ const OrderSchema: Schema<IOrder> = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const Order = mongoose.model<IOrder>('Order', OrderSchema);
 
 export default Order;
-
-
