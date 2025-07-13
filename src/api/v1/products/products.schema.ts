@@ -5,7 +5,7 @@ export const createProductSchema = z.object({
   description: z.string().min(1, "Description is required"),
   price: z.number().positive(),
   sku: z.string().min(1),
-  stock: z.number().int().nonnegative(),
+  stock: z.number().int().nonnegative().default(0),
   category_id: z.string().length(24),
   images: z.array(z.string().url()).optional(),
   brand: z.string().optional(),
@@ -15,7 +15,7 @@ export const createProductSchema = z.object({
     height: z.number().optional(),
     depth: z.number().optional(),
   }).optional(),
-});
+}).strict();
 
 export const updateProductSchema = createProductSchema.partial();
 
