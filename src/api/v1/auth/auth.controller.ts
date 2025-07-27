@@ -10,7 +10,13 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       loginInput.email,
       loginInput.password,
     );
-    res.status(200).json({ accessToken, refreshToken, user });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({ accessToken, user });
   } catch (error) {
     next(error);
   }
@@ -22,7 +28,7 @@ export async function refreshToken(
   next: NextFunction,
 ) {
   try {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken
     const tokens = await authService.refreshToken(refreshToken);
     res.status(200).json(tokens);
   } catch (error) {

@@ -9,6 +9,7 @@ import {
 } from '../../../utils/app-error';
 import { generateVerificationToken } from '../../../utils/token';
 import { EmailService } from '../../../services/email/email.service';
+import { sanitizeUser } from '@/utils';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 const JWT_EXPIRES_IN = '15000m';
@@ -86,7 +87,9 @@ export async function loginUser(email: string, password: string) {
   });
   const refreshToken = generateRefreshToken({ id: user.id.toString() });
 
-  return { accessToken, refreshToken, user };
+  const safeUser = sanitizeUser(user);
+
+  return { accessToken, refreshToken, user:safeUser };
 }
 
 export async function refreshToken(oldRefreshToken: string) {

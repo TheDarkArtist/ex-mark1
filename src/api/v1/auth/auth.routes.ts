@@ -9,7 +9,6 @@ import {
 } from './auth.controller';
 import {
   loginUserSchema,
-  refreshTokenSchema,
   requestPasswordResetSchema,
   resendVerificationSchema,
   resetPasswordSchema,
@@ -21,11 +20,7 @@ const router = Router();
 
 router.post('/login', validateRequest({ body: loginUserSchema }), login);
 
-router.post(
-  '/refresh-token',
-  validateRequest({ body: refreshTokenSchema }),
-  refreshToken,
-);
+router.post('/refresh-token', refreshToken);
 
 router.post(
   '/request-password-reset',

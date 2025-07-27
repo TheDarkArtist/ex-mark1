@@ -6,6 +6,9 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 import swaggerUi from 'swagger-ui-express';
+import cookieParser from 'cookie-parser'
+
+
 
 import routes from './routes';
 import { ErrorHandler } from './middlewares/error-handler';
@@ -20,6 +23,7 @@ app.use(compression());
 app.use(helmet());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
